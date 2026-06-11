@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Helix Manifest Tool — DAZN</title>
+<style>
+/* ── Reset & Base ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#0d0d0d;
+  --bg-secondary:#111111;
+  --bg-card:#161616;
+  --bg-input:#0a0a0a;
+  --bg-deep:#080808;
+  --border:#242424;
+  --border-hover:#333;
+  --border-focus:#f8ff00;
+  --accent:#f8ff00;
+  --accent-dim:rgba(248,255,0,0.08);
+  --accent-border:rgba(248,255,0,0.25);
+  --text-primary:#efefef;
+  --text-secondary:#888;
+  --text-muted:#444;
+  --success:#22c55e;
+  --success-dim:rgba(34,197,94,0.08);
+  --error:#ef4444;
+  --error-dim:rgba(239,68,68,0.08);
+  --warning:#f59e0b;
+  --info:#38bdf8;
+  --info-dim:rgba(56,189,248,0.08);
+  --purple:#a78bfa;
+  --purple-dim:rgba(167,139,250,0.08);
+  --radius:6px;
+  --radius-lg:10px;
+  --shadow:0 8px 32px rgba(0,0,0,0.6);
+}
+html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg-primary);color:var(--text-primary);font-size:13px;line-height:1.5;overflow:hidden}
+
+/* ══ TOP HEADER ══ */
+.app-header{
+  display:flex;align-items:center;gap:0;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border);
+  padding:0;
+  height:52px;
+  position:sticky;top:0;z-index:200;
+  flex-shrink:0;
+}
+.header-brand{
+  display:flex;align-items:center;gap:10px;
+  padding:0 20px;
+  border-right:1px solid var(--border);
+  height:100%;
+  flex-shrink:0;
+}
+.brand-logo{font-size:18px;font-weight:900;letter-spacing:-0.5px;color:var(--accent)}
+.brand-logo span{color:var(--text-primary)}
+.brand-sub{font-size:10px;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase}
+
+.header-controls{
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;
+  flex:1;
+  overflow-x:auto;
+  height:100%;
+}
+.header-controls::-webkit-scrollbar{height:0}
+
+.ctrl-group{
+  display:flex;flex-direction:column;gap:3px;
+  flex-shrink:0;
+}
+.ctrl-label{
+  font-size:9px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.ctrl-input,.ctrl-select{
+  background:var(--bg-input);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  color:var(--text-primary);
+  font-family:inherit;font-size:12px;
+  padding:5px 9px;
+  outline:none;
+  transition:border-color 0.15s,box-shadow 0.15s;
+}
+.ctrl-input:focus,.ctrl-select:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 2px rgba(248,255,0,0.07);
+}
+.ctrl-select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23666' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  padding-right:24px;
+  cursor:pointer;
+  min-width:90px;
+}
+.ctrl-select option{background:var(--bg-card)}
+
+/* Event ID textarea in header */
+.ctrl-textarea{
+  background:var(--bg-input);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  color:var(--text-primary);
+  font-family:'Consolas','Courier New',monospace;
+  font-size:11px;
+  padding:5px 9px;
+  outline:none;
+  resize:none;
+  width:220px;
+  height:36px;
+  line-height:1.4;
+  transition:border-color 0.15s,box-shadow 0.15s;
+}
+.ctrl-textarea:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 2px rgba(248,255,0,0.07);
+}
+.ctrl-textarea::placeholder{color:var(--text-muted);font-size:10px}
+
+/* Profile pills */
+.profile-pills{display:flex;gap:4px}
+.profile-pill{
+  padding:4px 10px;
+  background:var(--bg-input);
+  border:1px solid var(--border);
+  border-radius:20px;
+  color:var(--text-secondary);
+  font-size:11px;font-weight:600;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.profile-pill:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.profile-pill.active{
+  border-color:var(--accent);
+  background:var(--accent-dim);
+  color:var(--accent);
+}
+
+/* Generate button */
+.generate-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 18px;
+  background:var(--accent);
+  color:#000;border:none;
+  border-radius:var(--radius);
+  font-size:12px;font-weight:800;
+  cursor:pointer;
+  letter-spacing:0.3px;
+  transition:all 0.15s;
+  white-space:nowrap;
+  flex-shrink:0;
+  height:34px;
+}
+.generate-btn:hover{background:#e8ef00;box-shadow:0 4px 16px rgba(248,255,0,0.25)}
+.generate-btn:active{transform:scale(0.98)}
+.generate-btn:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;box-shadow:none}
+.generate-btn .g-spinner{
+  width:13px;height:13px;
+  border:2px solid rgba(0,0,0,0.25);
+  border-top-color:#000;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  display:none;
+}
+.generate-btn.loading .g-spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.header-badge{
+  margin-left:auto;margin-right:16px;
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  color:var(--accent);
+  font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+  letter-spacing:0.8px;text-transform:uppercase;
+  flex-shrink:0;
+}
+
+/* ══ MAIN BODY ══ */
+.app-body{
+  height:calc(100vh - 52px);
+  overflow-y:auto;
+  padding:20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.app-body::-webkit-scrollbar{width:5px}
+.app-body::-webkit-scrollbar-track{background:transparent}
+.app-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ══ EMPTY STATE ══ */
+.empty-state{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:14px;color:var(--text-muted);
+  text-align:center;padding:80px 40px;
+  flex:1;
+}
+.empty-icon{font-size:52px;opacity:0.2}
+.empty-state h3{font-size:16px;color:var(--text-secondary);font-weight:600}
+.empty-state p{font-size:12px;max-width:340px;line-height:1.7;color:var(--text-muted)}
+.empty-state kbd{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:4px;padding:1px 6px;font-size:11px;
+  color:var(--text-secondary);font-family:monospace;
+}
+
+/* ══ RESULTS HEADER BAR ══ */
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  flex-shrink:0;
+}
+.results-bar-left{display:flex;align-items:center;gap:10px}
+.results-count{font-size:13px;font-weight:700;color:var(--text-primary)}
+.results-meta-tags{display:flex;gap:6px}
+.results-bar-right{display:flex;gap:6px}
+
+/* ══ TAGS ══ */
+.tag{
+  font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:4px;
+  letter-spacing:0.5px;text-transform:uppercase;
+}
+.tag-headend{background:rgba(167,139,250,0.12);color:#c4b5fd;border:1px solid rgba(167,139,250,0.2)}
+.tag-format{background:rgba(34,197,94,0.1);color:#86efac;border:1px solid rgba(34,197,94,0.18)}
+.tag-profile{background:rgba(248,255,0,0.08);color:#e8ef00;border:1px solid rgba(248,255,0,0.18)}
+
+/* ══ EVENT RESULT BLOCK ══ */
+.event-block{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+.event-block.has-error{border-color:rgba(239,68,68,0.25)}
+
+/* Event block header */
+.event-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;user-select:none;
+  transition:background 0.12s;
+}
+.event-header:hover{background:rgba(255,255,255,0.015)}
+.event-id-badge{
+  background:var(--accent-dim);
+  border:1px solid var(--accent-border);
+  color:var(--accent);
+  font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:5px;
+  font-family:monospace;letter-spacing:0.3px;
+  white-space:nowrap;flex-shrink:0;
+}
+.event-id-badge.error-badge{
+  background:var(--error-dim);
+  border-color:rgba(239,68,68,0.25);
+  color:var(--error);
+}
+.event-id-text{
+  font-size:12px;font-weight:600;
+  color:var(--text-primary);
+  font-family:monospace;
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.event-header-meta{display:flex;align-items:center;gap:8px;margin-left:auto}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.status-dot.loading{background:var(--warning);animation:pulse 1s ease-in-out infinite}
+.status-dot.success{background:var(--success)}
+.status-dot.error{background:var(--error)}
+.status-dot.partial{background:var(--warning)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
+.chevron{color:var(--text-muted);font-size:11px;transition:transform 0.2s;flex-shrink:0}
+.chevron.open{transform:rotate(180deg)}
+
+/* Event block body */
+.event-body{display:none;flex-direction:column;gap:0}
+.event-body.open{display:flex}
+
+/* ══ URL ROW ══ */
+.url-row{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px;
+  background:var(--bg-deep);
+  border-bottom:1px solid var(--border);
+}
+.url-label{
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.8px;color:var(--text-muted);white-space:nowrap;
+}
+.url-text{
+  flex:1;font-family:'Consolas','Courier New',monospace;
+  font-size:11px;color:#7dd3fc;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  cursor:text;user-select:all;
+}
+.url-actions{display:flex;gap:5px;flex-shrink:0}
+
+/* ══ MANIFEST TABS ══ */
+.manifest-tabs-wrapper{
+  display:flex;flex-direction:column;
+}
+.manifest-tab-bar{
+  display:flex;align-items:center;gap:0;
+  border-bottom:1px solid var(--border);
+  background:var(--bg-deep);
+  padding:0 16px;
+  overflow-x:auto;
+}
+.manifest-tab-bar::-webkit-scrollbar{height:0}
+.manifest-tab{
+  display:flex;align-items:center;gap:6px;
+  padding:9px 14px;
+  font-size:11px;font-weight:600;
+  color:var(--text-muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.15s;
+  white-space:nowrap;
+  user-select:none;
+}
+.manifest-tab:hover{color:var(--text-secondary)}
+.manifest-tab.active{color:var(--text-primary);border-bottom-color:var(--accent)}
+.manifest-tab .tab-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--text-muted);
+  transition:background 0.15s;
+}
+.manifest-tab.active .tab-dot{background:var(--accent)}
+.manifest-tab.tab-loading .tab-dot{background:var(--warning);animation:pulse 1s ease-in-out infinite}
+.manifest-tab.tab-error .tab-dot{background:var(--error)}
+.manifest-tab.tab-success .tab-dot{background:var(--success)}
+
+/* ══ MANIFEST PANEL ══ */
+.manifest-panel{display:none;flex-direction:column}
+.manifest-panel.active{display:flex}
+
+.manifest-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border);
+}
+.manifest-toolbar-left{display:flex;align-items:center;gap:10px}
+.manifest-type-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.8px;color:var(--text-muted);
+}
+.manifest-stats{display:flex;gap:8px}
+.manifest-stat{
+  font-size:10px;color:var(--text-muted);
+  background:var(--bg-input);
+  border:1px solid var(--border);
+  border-radius:4px;padding:1px 7px;
+}
+.manifest-toolbar-right{display:flex;gap:5px}
+
+/* ══ MANIFEST VIEWER ══ */
+.manifest-viewer{
+  position:relative;
+  background:#080808;
+}
+.manifest-pre{
+  padding:14px 16px;
+  font-family:'Consolas','Courier New',monospace;
+  font-size:11.5px;line-height:1.75;
+  color:#ccc;
+  overflow-x:auto;overflow-y:auto;
+  white-space:pre;
+  max-height:380px;
+  transition:max-height 0.3s ease;
+}
+.manifest-pre.expanded{max-height:75vh}
+.manifest-pre::-webkit-scrollbar{width:5px;height:5px}
+.manifest-pre::-webkit-scrollbar-track{background:transparent}
+.manifest-pre::-webkit-scrollbar-thumb{background:#222;border-radius:4px}
+
+/* Syntax colours */
+.hl-tag{color:#c084fc}
+.hl-url{color:#7dd3fc}
+.hl-num{color:#fbbf24}
+.hl-comment{color:#4b5563;font-style:italic}
+.hl-attr{color:#86efac}
+.hl-xml-tag{color:#c084fc}
+.hl-xml-attr{color:#86efac}
+.hl-xml-val{color:#fbbf24}
+
+/* ══ SKELETON ══ */
+.skeleton{
+  background:linear-gradient(90deg,#161616 25%,#1e1e1e 50%,#161616 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+  border-radius:3px;height:11px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-block{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+
+/* ══ ERROR BLOCK ══ */
+.error-block{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:14px 16px;
+  background:var(--error-dim);
+  border-top:1px solid rgba(239,68,68,0.15);
+}
+.error-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.error-msg{font-size:11.5px;color:#fca5a5;line-height:1.6}
+.error-msg strong{display:block;color:var(--error);margin-bottom:3px;font-size:12px}
+
+/* ══ BUTTONS ══ */
+.action-btn{
+  padding:4px 10px;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:5px;
+  color:var(--text-secondary);
+  font-size:10px;font-weight:600;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+  letter-spacing:0.3px;
+}
+.action-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.action-btn.copied{border-color:var(--success);color:var(--success);background:var(--success-dim)}
+.action-btn.dl{border-color:rgba(56,189,248,0.3);color:var(--info)}
+.action-btn.dl:hover{border-color:var(--info);background:var(--info-dim)}
+.icon-btn{
+  padding:5px 11px;
+  background:var(--bg-input);
+  border:1px solid var(--border);
+  border-radius:5px;
+  color:var(--text-secondary);
+  font-size:11px;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+/* ══ TOAST ══ */
+.toast-container{
+  position:fixed;bottom:20px;right:20px;
+  display:flex;flex-direction:column;gap:7px;z-index:9999;
+}
+.toast{
+  padding:9px 14px;border-radius:var(--radius);
+  font-size:12px;font-weight:500;
+  display:flex;align-items:center;gap:8px;
+  animation:toastIn 0.25s ease;
+  box-shadow:var(--shadow);max-width:320px;
+}
+.toast.success{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);color:#86efac}
+.toast.error{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
+.toast.info{background:var(--accent-dim);border:1px solid var(--accent-border);color:var(--accent)}
+@keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ══ DIVIDER ══ */
+.section-divider{height:1px;background:var(--border);margin:0}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-brand">
+    <div>
+      <div class="brand-logo">HELIX<span>.</span></div>
+      <div class="brand-sub">Manifest Tool</div>
+    </div>
+  </div>
+
+  <div class="header-controls">
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Event IDs</div>
+      <textarea
+        id="eventIdInput"
+        class="ctrl-textarea"
+        placeholder="One per line or comma-separated…"
+        title="Enter Event IDs — one per line or comma-separated. Ctrl+Enter to generate."
+      ></textarea>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Headend</div>
+      <select id="headendSelect" class="ctrl-select" onchange="onHeadendChange()">
+        <option value="DCA">DCA</option>
+        <option value="DCB">DCB</option>
+        <option value="DCG">DCG</option>
+        <option value="DCH">DCH</option>
+      </select>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Format</div>
+      <select id="formatSelect" class="ctrl-select">
+        <option value="HLS">HLS</option>
+        <option value="DASH">DASH</option>
+        <option value="Smooth" id="smoothOption">Smooth</option>
+      </select>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Profile</div>
+      <div class="profile-pills">
+        <button class="profile-pill active" data-profile="all"          onclick="selectProfile(this)">Default</button>
+        <button class="profile-pill"         data-profile="hevc-all"    onclick="selectProfile(this)">hevc-all</button>
+        <button class="profile-pill"         data-profile="hevc-hdr-all"onclick="selectProfile(this)">hevc-hdr-all</button>
+      </div>
+    </div>
+
+    <div class="ctrl-group" style="justify-content:flex-end">
+      <div class="ctrl-label">&nbsp;</div>
+      <button class="generate-btn" id="generateBtn" onclick="generateManifests()">
+        <div class="g-spinner" id="btnSpinner"></div>
+        <span id="btnText">⚡ Generate</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="header-badge">DAZN Internal</div>
+</header>
+
+<main class="app-body" id="appBody">
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">📡</div>
+    <h3>No Manifests Generated</h3>
+    <p>
+      Enter one or more Event IDs, choose your Headend, Format and Profile,
+      then click <strong>Generate</strong>.<br/><br/>
+      Press <kbd>Ctrl+Enter</kbd> inside the Event ID box to generate quickly.
+    </p>
+  </div>
+</main>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   URL TEMPLATES
+   CHANGE 1 & 3: DCG and DCH now use {PROFILE} placeholder.
+   Each profile maps to a separate base URL for DCG/DCH because
+   the token segment differs per profile on those headends.
+══════════════════════════════════════════════════════════════ */
+
+const DCG_TOKEN = 'aHA5ZHpwc2NlOW5meXMwcmlteGFzZ3phOW15bmt0ZmRuYWEyaTI1MDlzMGttaXNmM2RvdzlodTN0YjQ5b3ZwZnA5Z2JvYmI2ZGoxZXo3djcwdDU5YjF5cjE1NzRseTNzN3NvYzNucHA1ZXJvZThvYnBvbWxqcmZjbDRvbzJ1dXA=';
+const DCH_TOKEN = 'aHA5ZHpwc2NlOW5meXMwcmlteGFzZ3phOW15bmt0ZmRuYWEyaTI1MDlzMGttaXNmM2RvdzlodTN0YjQ5b3ZwZnA5Z2JvYmI2ZGoxZXo3djcwdDU5YjF5cjE1NzRseTNzN3NvYzNucHA1ZXJvZThvYnBvbWxqcmZjbDRvbzJ1dXA=';
+
+const URL_TEMPLATES = {
+  DCA:{
+    HLS:   'https://m2a-dazn-preview-dca.m2amedia.services/{EVENT_ID}/{PROFILE}/stream.m3u8?outlet=global',
+    DASH:  'https://m2a-dazn-preview-dca.m2amedia.services/{EVENT_ID}/{PROFILE}/stream.mpd?outlet=global',
+    Smooth:'https://m2a-dazn-preview-dca.m2amedia.services/{EVENT_ID}/{PROFILE}/Manifest?outlet=global',
+  },
+  DCB:{
+    HLS:   'https://m2a-dazn-preview-dcb.m2amedia.services/{EVENT_ID}/{PROFILE}/stream.m3u8?outlet=global',
+    DASH:  'https://m2a-dazn-preview-dcb.m2amedia.services/{EVENT_ID}/{PROFILE}/stream.mpd?outlet=global',
+    Smooth:'https://m2a-dazn-preview-dcb.m2amedia.services/{EVENT_ID}/{PROFILE}/Manifest?outlet=global',
+  },
+  // DCG: token is the same for all profiles, only the profile segment changes
+  DCG:{
+    HLS: `https://dazn-dcg-prda.uksouth-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCG_TOKEN}/{PROFILE}/stream.m3u8`,
+    DASH:`https://dazn-dcg-prda.uksouth-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCG_TOKEN}/{PROFILE}/stream.mpd`,
+  },
+  // DCH: token is the same for all profiles, only the profile segment changes
+  DCH:{
+    HLS: `https://live-live-dazn-az-dch-prda.westeurope-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCH_TOKEN}/{PROFILE}/stream.m3u8`,
+    DASH:`https://live-live-dazn-az-dch-prda.westeurope-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCH_TOKEN}/{PROFILE}/stream.mpd`,
+  },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+let selectedProfile = 'all';
+const manifestStore = {};
+
+/* ══════════════════════════════════════════════════════════════
+   HEADEND CHANGE — unchanged
+══════════════════════════════════════════════════════════════ */
+function onHeadendChange(){
+  const headend   = document.getElementById('headendSelect').value;
+  const fmtSel    = document.getElementById('formatSelect');
+  const smoothOpt = document.getElementById('smoothOption');
+  const noSmooth  = ['DCG','DCH'].includes(headend);
+  smoothOpt.disabled      = noSmooth;
+  smoothOpt.style.display = noSmooth ? 'none' : '';
+  if(noSmooth && fmtSel.value === 'Smooth') fmtSel.value = 'HLS';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PROFILE SELECTION — unchanged
+══════════════════════════════════════════════════════════════ */
+function selectProfile(btn){
+  document.querySelectorAll('.profile-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedProfile = btn.dataset.profile;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BUILD MASTER URL — unchanged logic, {PROFILE} now works for
+   all headends because templates include the placeholder
+══════════════════════════════════════════════════════════════ */
+function buildUrl(eventId, headend, format){
+  const template = URL_TEMPLATES[headend]?.[format];
+  if(!template) return null;
+  return template
+    .replace('{EVENT_ID}', eventId.trim()).replace('{PROFILE}', selectedProfile);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PARSE EVENT IDs — unchanged
+══════════════════════════════════════════════════════════════ */
+function parseEventIds(raw){
+  return raw
+    .split(/[\n,]+/)
+    .map(id => id.trim())
+    .filter(id => id.length > 0);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FETCH MANIFEST — unchanged
+══════════════════════════════════════════════════════════════ */
+async function fetchManifest(url){
+  try{
+    const res = await fetch(url,{
+      method:'GET',
+      headers:{'Accept':'*/*'},
+      signal:AbortSignal.timeout(20000),
+    });
+    if(!res.ok) throw new Error(`HTTP ${res.status} — ${res.statusText}`);
+    const text = await res.text();
+    if(!text || text.trim().length === 0) throw new Error('Empty response received from server.');
+    return { ok:true, content:text, status:res.status };
+  } catch(err){
+    const isCors =
+      err.name === 'TypeError' ||
+      err.message.includes('Failed to fetch') ||
+      err.message.includes('NetworkError');
+    return {
+      ok:false,
+      content:null,
+      error: isCors
+        ? `CORS / Network Error: The manifest could not be fetched directly from the browser.\n\nURL: ${url}\n\nSuggestion: Deploy this tool behind a reverse proxy or server-side fetcher.\n\nOriginal: ${err.message}`
+        : `${err.message}\n\nURL: ${url}`,
+    };
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESOLVE CHILD URL — unchanged
+══════════════════════════════════════════════════════════════ */
+function resolveChildUrl(masterUrl, relativePath){
+  try{
+    const base    = masterUrl.split('?')[0];
+    const baseUrl = new URL(base);
+    const basePath = baseUrl.pathname.substring(0, baseUrl.pathname.lastIndexOf('/') + 1);
+    const parts   = (basePath + relativePath).split('/');
+    const resolved = [];
+    for(const part of parts){
+      if(part === '..') resolved.pop();
+      else if(part !== '.') resolved.push(part);
+    }
+    return `${baseUrl.origin}${resolved.join('/')}`;
+  } catch(e){
+    return null;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PARSE HLS MASTER — unchanged
+   Used for ALL headends (DCA, DCB, DCG, DCH) when format=HLS
+══════════════════════════════════════════════════════════════ */
+function parseHlsChildren(masterContent, masterUrl){
+  const lines = masterContent.split('\n');
+  let videoRelative = null;
+  let audioRelative = null;
+
+  for(let i = 0; i < lines.length; i++){
+    const line = lines[i].trim();
+
+    if(!audioRelative && line.startsWith('#EXT-X-MEDIA') && line.includes('TYPE=AUDIO')){
+      const m = line.match(/URI="([^"]+)"/);
+      if(m) audioRelative = m[1];
+    }
+
+    if(!videoRelative && line.startsWith('#EXT-X-STREAM-INF')){
+      for(let j = i+1; j < lines.length; j++){
+        const next = lines[j].trim();
+        if(next.length > 0 && !next.startsWith('#')){
+          videoRelative = next;
+          break;
+        }
+      }
+    }
+
+    if(videoRelative && audioRelative) break;
+  }
+
+  return {
+    video: videoRelative ? resolveChildUrl(masterUrl, videoRelative) : null,
+    audio: audioRelative ? resolveChildUrl(masterUrl, audioRelative) : null,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PARSE DASH / SMOOTH — kept in code but NOT called anymore
+   (CHANGE 2: DASH and Smooth show Master only)
+   These functions are retained so nothing is removed.
+══════════════════════════════════════════════════════════════ */
+function parseDashChildren(masterContent, masterUrl){
+  try{
+    const parser    = new DOMParser();
+    const doc       = parser.parseFromString(masterContent, 'application/xml');
+    const mpdBaseEl = doc.querySelector('MPD > BaseURL');
+    const mpdBase   = mpdBaseEl ? mpdBaseEl.textContent.trim() : '';
+    let videoUrl    = null;
+    let audioUrl    = null;
+
+    doc.querySelectorAll('AdaptationSet').forEach(adapt => {
+      const contentType = (adapt.getAttribute('contentType') || '').toLowerCase();
+      const mimeType    = (adapt.getAttribute('mimeType')    || '').toLowerCase();
+      const isVideo = contentType === 'video' || mimeType.includes('video');
+      const isAudio = contentType === 'audio' || mimeType.includes('audio');
+      const segTemplate = adapt.querySelector('SegmentTemplate');
+      const rep         = adapt.querySelector('Representation');
+
+      if(segTemplate && rep){
+        const init  = segTemplate.getAttribute('initialization') || segTemplate.getAttribute('media') || '';
+        const repId = rep.getAttribute('id')        || '';
+        const bw    = rep.getAttribute('bandwidth') || '';
+        let segUrl  = init
+          .replace('$RepresentationID$', repId)
+          .replace('$Bandwidth$', bw)
+          .replace(/\$Number[^$]*\$/, '1')
+          .replace(/\$Time[^$]*\$/, '0');
+        const baseStr = (adapt.querySelector('BaseURL') || doc.querySelector('Period > BaseURL'))
+          ?.textContent.trim() || mpdBase;
+        const fullUrl = resolveChildUrl(masterUrl, baseStr + segUrl);
+        if(isVideo && !videoUrl) videoUrl = fullUrl;
+        if(isAudio && !audioUrl) audioUrl = fullUrl;
+      } else {
+        const url = (rep?.querySelector('BaseURL') || adapt.querySelector('BaseURL'))
+          ?.textContent.trim();
+        if(url){
+          const fullUrl = url.startsWith('http') ? url : resolveChildUrl(masterUrl, url);
+          if(isVideo && !videoUrl) videoUrl = fullUrl;
+          if(isAudio && !audioUrl) audioUrl = fullUrl;
+        }
+      }
+    });
+    return { video:videoUrl, audio:audioUrl };
+  } catch(e){ return { video:null, audio:null }; }
+}
+
+function parseSmoothChildren(masterContent, masterUrl){
+  try{
+    const parser = new DOMParser();
+    const doc    = parser.parseFromString(masterContent, 'application/xml');
+    let videoUrl = null;
+    let audioUrl = null;
+
+    doc.querySelectorAll('StreamIndex').forEach(stream => {
+      const type      = (stream.getAttribute('Type') || '').toLowerCase();
+      const url       = stream.getAttribute('Url')   || '';
+      const sampleUrl = url
+        .replace('{bitrate}',    stream.querySelector('QualityLevel')?.getAttribute('Bitrate') || '0')
+        .replace('{start time}', '0')
+        .replace('{start_time}', '0');
+      const fullUrl = sampleUrl.startsWith('http')
+        ? sampleUrl
+        : resolveChildUrl(masterUrl, sampleUrl);
+      if(type === 'video' && !videoUrl) videoUrl = fullUrl;
+      if(type === 'audio' && !audioUrl) audioUrl = fullUrl;
+    });
+    return { video:videoUrl, audio:audioUrl };
+  } catch(e){ return { video:null, audio:null }; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SYNTAX HIGHLIGHT — unchanged
+══════════════════════════════════════════════════════════════ */
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function highlightHls(text){
+  return text.split('\n').map(line => {
+    const e = escapeHtml(line);
+    if(line.startsWith('#EXT'))    return `<span class="hl-tag">${e}</span>`;
+    if(line.startsWith('#'))       return `<span class="hl-comment">${e}</span>`;
+    if(/^https?:\/\//.test(line) ||
+       line.endsWith('.m3u8') || line.endsWith('.ts') ||
+       line.endsWith('.mp4')  || line.endsWith('.cmfv') ||
+       line.endsWith('.cmfa'))    return `<span class="hl-url">${e}</span>`;
+    if(/^\d+$/.test(line.trim())) return `<span class="hl-num">${e}</span>`;
+    return e;
+  }).join('\n');
+}
+
+function highlightXml(text){
+  return text.split('\n').map(line => {
+    const e = escapeHtml(line);
+    if(line.trim().startsWith('<?') || line.trim().startsWith('<!--'))
+      return `<span class="hl-comment">${e}</span>`;
+    return e
+      .replace(/(&lt;\/?[\w:.-]+)/g,
+        '<span class="hl-xml-tag">$1</span>')
+      .replace(/([\w:.-]+=)(&quot;[^&]*&quot;)/g,
+        '<span class="hl-xml-attr">$1</span><span class="hl-xml-val">$2</span>');
+  }).join('\n');
+}
+
+function highlightManifest(text, format){
+  if(!text) return '';
+  if(format === 'HLS')    return highlightHls(text);
+  if(format === 'DASH')   return highlightXml(text);
+  if(format === 'Smooth') return highlightXml(text);
+  return escapeHtml(text);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DOWNLOAD MANIFEST — unchanged
+══════════════════════════════════════════════════════════════ */
+function downloadManifest(eventId, format, content, suffix){
+  const safeFmt  = format.toUpperCase().replace(' ','_');
+  const safeSfx  = suffix ? `_${suffix}` : '';
+  const filename = `${eventId}_${safeFmt}${safeSfx}.csv`;
+  const blob     = new Blob([content], { type:'text/plain' });
+  const url      = URL.createObjectURL(blob);
+  const a        = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast(`Downloaded: ${filename}`, 'success');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COPY TO CLIPBOARD — unchanged
+══════════════════════════════════════════════════════════════ */
+async function copyToClipboard(text, btn, label){
+  try{
+    await navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+    showToast(`${label || 'Content'} copied to clipboard.`, 'success');
+  } catch(e){
+    showToast('Copy failed — please copy manually.', 'error');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MANIFEST STATS — unchanged
+══════════════════════════════════════════════════════════════ */
+function getStats(content){
+  if(!content) return '';
+  const lines = content.split('\n').length;
+  const bytes = new Blob([content]).size;
+  const size  = bytes > 1024 ? `${(bytes/1024).toFixed(1)} KB` : `${bytes} B`;
+  return { lines, size };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BUILD MANIFEST PANEL HTML — unchanged
+══════════════════════════════════════════════════════════════ */
+function buildManifestPanel(panelId, tabKey, eventId, format, result, isActive){
+  const storeKey = `${panelId}-${tabKey}`;
+
+  if(!result.ok){
+    return `
+      <div class="manifest-panel ${isActive ? 'active' : ''}" id="panel-${panelId}-${tabKey}">
+        <div class="error-block">
+          <span class="error-icon">⚠️</span>
+          <div class="error-msg">
+            <strong>Failed to retrieve manifest</strong>
+            ${escapeHtml(result.error)}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  manifestStore[storeKey] = result.content;
+  const stats       = getStats(result.content);
+  const highlighted = highlightManifest(result.content, format);
+
+  return `
+    <div class="manifest-panel ${isActive ? 'active' : ''}" id="panel-${panelId}-${tabKey}">
+      <div class="manifest-toolbar">
+        <div class="manifest-toolbar-left">
+          <span class="manifest-type-label">${tabKey.toUpperCase()}</span>
+          <div class="manifest-stats">
+            <span class="manifest-stat">${stats.lines} lines</span>
+            <span class="manifest-stat">${stats.size}</span>
+          </div>
+        </div>
+        <div class="manifest-toolbar-right">
+          <button class="action-btn"
+            onclick="copyToClipboard(manifestStore['${storeKey}'], this, '${tabKey} manifest')">
+            ⎘ Copy
+          </button>
+          <button class="action-btn dl"
+            onclick="downloadManifest('${escapeHtml(eventId)}','${format}',manifestStore['${storeKey}'],'${tabKey}')">
+            ↓ Download
+          </button>
+          <button class="action-btn"
+            onclick="toggleExpand('mpre-${panelId}-${tabKey}', this)">
+            ⤢ Expand
+          </button>
+        </div>
+      </div>
+      <div class="manifest-viewer">
+        <pre class="manifest-pre" id="mpre-${panelId}-${tabKey}">${highlighted}</pre>
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOGGLE EXPAND — unchanged
+══════════════════════════════════════════════════════════════ */
+function toggleExpand(preId, btn){
+  const pre = document.getElementById(preId);
+  if(!pre) return;
+  const expanded = pre.classList.toggle('expanded');
+  btn.textContent = expanded ? '⤡ Collapse' : '⤢ Expand';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TAB SWITCHING — unchanged
+══════════════════════════════════════════════════════════════ */
+function switchTab(blockId, tabKey){
+  document.querySelectorAll(`#${blockId} .manifest-tab`).forEach(t => t.classList.remove('active'));
+  document.querySelectorAll(`#${blockId} .manifest-panel`).forEach(p => p.classList.remove('active'));
+  const tab   = document.getElementById(`tab-${blockId}-${tabKey}`);
+  const panel = document.getElementById(`panel-${blockId}-${tabKey}`);
+  if(tab)   tab.classList.add('active');
+  if(panel) panel.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOGGLE EVENT BLOCK — unchanged
+══════════════════════════════════════════════════════════════ */
+function toggleBlock(blockId){
+  const body    = document.getElementById(`body-${blockId}`);
+  const chevron = document.getElementById(`chev-${blockId}`);
+  const isOpen  = body.classList.contains('open');
+  body.classList.toggle('open',    !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   EXPAND / COLLAPSE ALL — unchanged
+══════════════════════════════════════════════════════════════ */
+function expandAll(){
+  document.querySelectorAll('.event-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.add('open'));
+}
+function collapseAll(){
+  document.querySelectorAll('.event-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER SKELETON — unchanged
+══════════════════════════════════════════════════════════════ */
+function renderSkeleton(blockId, eventId, url, headend, format){
+  return `
+    <div class="event-block" id="${blockId}">
+      <div class="event-header" onclick="toggleBlock('${blockId}')">
+        <span class="event-id-badge">EVENT</span>
+        <span class="event-id-text">${escapeHtml(eventId)}</span>
+        <div class="event-header-meta">
+          <span class="tag tag-headend">${headend}</span>
+          <span class="tag tag-format">${format}</span>
+          <span class="tag tag-profile">${selectedProfile}</span>
+          <span class="status-dot loading" id="sdot-${blockId}"></span>
+        </div>
+        <span class="chevron open" id="chev-${blockId}">▼</span>
+      </div>
+      <div class="event-body open" id="body-${blockId}">
+        <div class="url-row">
+          <span class="url-label">URL</span>
+          <span class="url-text" title="${escapeHtml(url)}">${escapeHtml(url)}</span>
+          <div class="url-actions">
+            <button class="action-btn"
+              onclick="event.stopPropagation();copyToClipboard('${escapeHtml(url)}',this,'URL')">
+              ⎘ Copy URL
+            </button>
+          </div>
+        </div>
+        <div class="skeleton-block">
+          <div class="skeleton" style="width:55%"></div>
+          <div class="skeleton" style="width:88%"></div>
+          <div class="skeleton" style="width:72%"></div>
+          <div class="skeleton" style="width:91%"></div>
+          <div class="skeleton" style="width:60%"></div>
+          <div class="skeleton" style="width:80%"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UPDATE EVENT BLOCK
+   CHANGE 2: Video/Audio child tabs only shown for HLS.
+   CHANGE 4: Layout is identical for all headends — no special
+             casing for DCG/DCH, same vertical tab+panel layout.
+══════════════════════════════════════════════════════════════ */
+function updateBlock(blockId, eventId, url, headend, format, masterResult, childResults){
+  const block  = document.getElementById(blockId);
+  const dot    = document.getElementById(`sdot-${blockId}`);
+  const body   = document.getElementById(`body-${blockId}`);
+
+  const anyOk = masterResult.ok ||
+    (childResults.video && childResults.video.ok) ||
+    (childResults.audio && childResults.audio.ok);
+  const allOk = masterResult.ok &&
+    (!childResults.video || childResults.video.ok) &&
+    (!childResults.audio || childResults.audio.ok);
+
+  if(allOk)      dot.className = 'status-dot success';
+  else if(anyOk) dot.className = 'status-dot partial';
+  else           dot.className = 'status-dot error';
+
+  if(!anyOk){
+    block.classList.add('has-error');
+    block.querySelector('.event-id-badge').classList.add('error-badge');
+  }
+
+  const tabs   = [];
+  const panels = [];
+
+  // Master tab — always shown for all formats and all headends
+  const masterStatus = masterResult.ok ? 'tab-success' : 'tab-error';
+  tabs.push(`
+    <div class="manifest-tab active ${masterStatus}" id="tab-${blockId}-master"
+         onclick="switchTab('${blockId}','master')">
+      <span class="tab-dot"></span> Master
+    </div>`);
+  panels.push(buildManifestPanel(blockId, 'master', eventId, format, masterResult, true));
+
+  // CHANGE 2: Video + Audio child tabs — HLS ONLY (all headends DCA/DCB/DCG/DCH)
+  // DASH and Smooth show Master tab only — no child tabs
+  if(format === 'HLS'){
+    if(childResults.video !== undefined){
+      const vStatus = childResults.video?.ok ? 'tab-success' : 'tab-error';
+      tabs.push(`
+        <div class="manifest-tab ${vStatus}" id="tab-${blockId}-video"
+             onclick="switchTab('${blockId}','video')">
+          <span class="tab-dot"></span> Video Child
+        </div>`);
+      panels.push(buildManifestPanel(blockId, 'video', eventId, format,
+        childResults.video || { ok:false, error:'Could not resolve video child URL.' }, false));
+    }
+    if(childResults.audio !== undefined){
+      const aStatus = childResults.audio?.ok ? 'tab-success' : 'tab-error';
+      tabs.push(`
+        <div class="manifest-tab ${aStatus}" id="tab-${blockId}-audio"
+             onclick="switchTab('${blockId}','audio')">
+          <span class="tab-dot"></span> Audio Child
+        </div>`);
+      panels.push(buildManifestPanel(blockId, 'audio', eventId, format,
+        childResults.audio || { ok:false, error:'Could not resolve audio child URL.' }, false));
+    }
+  }
+
+  // CHANGE 4: Same body HTML structure for all headends
+  body.innerHTML = `
+    <div class="url-row">
+      <span class="url-label">URL</span>
+      <span class="url-text" title="${escapeHtml(url)}">${escapeHtml(url)}</span>
+      <div class="url-actions">
+        <button class="action-btn"
+          onclick="event.stopPropagation();copyToClipboard('${escapeHtml(url)}',this,'URL')">
+          ⎘ Copy URL
+        </button>
+      </div>
+    </div>
+    <div class="manifest-tabs-wrapper">
+      <div class="manifest-tab-bar">${tabs.join('')}</div>
+      ${panels.join('')}
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MAIN — GENERATE MANIFESTS
+   CHANGE 2: Child fetching only happens for HLS.
+   DASH and Smooth skip child parsing entirely.
+══════════════════════════════════════════════════════════════ */
+async function generateManifests(){
+  const rawInput = document.getElementById('eventIdInput').value;
+  const headend  = document.getElementById('headendSelect').value;
+  const format   = document.getElementById('formatSelect').value;
+  const eventIds = parseEventIds(rawInput);
+
+  if(eventIds.length === 0){
+    showToast('Please enter at least one Event ID.', 'error');
+    document.getElementById('eventIdInput').focus();
+    return;
+  }
+  if(!URL_TEMPLATES[headend]?.[format]){
+    showToast(`${format} is not supported for ${headend}.`, 'error');
+    return;
+  }
+
+  const btn     = document.getElementById('generateBtn');
+  const spinner = document.getElementById('btnSpinner');
+  const btnText = document.getElementById('btnText');
+  btn.disabled          = true;
+  btn.classList.add('loading');
+  spinner.style.display = 'block';
+  btnText.textContent   = 'Fetching…';
+
+  Object.keys(manifestStore).forEach(k => delete manifestStore[k]);
+
+  const jobs = eventIds.map((id, i) => ({
+    index:   i,
+    blockId: `block-${i}`,
+    eventId: id,
+    url:     buildUrl(id, headend, format),
+  }));
+
+  const profileLabel = selectedProfile === 'all' ? 'Default' : selectedProfile;
+  const appBody      = document.getElementById('appBody');
+
+  appBody.innerHTML = `
+    <div class="results-bar">
+      <div class="results-bar-left">
+        <span class="results-count">${eventIds.length} Event${eventIds.length > 1 ? 's' : ''}</span>
+        <div class="results-meta-tags">
+          <span class="tag tag-headend">${headend}</span>
+          <span class="tag tag-format">${format}</span>
+          <span class="tag tag-profile">${profileLabel}</span>
+        </div>
+      </div>
+      <div class="results-bar-right">
+        <button class="icon-btn" onclick="expandAll()">⊞ Expand All</button>
+        <button class="icon-btn" onclick="collapseAll()">⊟ Collapse All</button>
+      </div>
+    </div>
+    ${jobs.map(j => renderSkeleton(j.blockId, j.eventId, j.url, headend, format)).join('')}`;
+
+  const results = await Promise.allSettled(jobs.map(async job => {
+
+    // 1. Fetch master manifest — unchanged
+    const masterResult = await fetchManifest(job.url);
+
+    // 2. CHANGE 2: Only parse and fetch children for HLS
+    let childUrls    = { video:null, audio:null };
+    let childResults = {};
+
+    if(masterResult.ok && format === 'HLS'){
+      // CHANGE 1: HLS children work for ALL headends including DCG and DCH
+      childUrls = parseHlsChildren(masterResult.content, job.url);
+
+      const [videoResult, audioResult] = await Promise.all([
+        childUrls.video ? fetchManifest(childUrls.video) : Promise.resolve(null),
+        childUrls.audio ? fetchManifest(childUrls.audio) : Promise.resolve(null),
+      ]);
+
+      if(childUrls.video !== null) childResults.video = videoResult;
+      if(childUrls.audio !== null) childResults.audio = audioResult;
+    }
+    // DASH and Smooth: masterResult only, childResults stays empty {}
+
+    // 3. Update UI block
+    updateBlock(job.blockId, job.eventId, job.url, headend, format, masterResult, childResults);
+
+    return { masterResult, childResults };
+  }));
+
+  const succeeded = results.filter(r =>
+    r.status === 'fulfilled' && r.value?.masterResult?.ok
+  ).length;
+  const failed = eventIds.length - succeeded;
+
+  if(failed === 0)
+    showToast(`All ${succeeded} manifest${succeeded > 1 ? 's' : ''} fetched successfully.`, 'success');
+  else if(succeeded === 0)
+    showToast(`All ${failed} requests failed. Check URLs or CORS configuration.`, 'error');
+  else
+    showToast(`${succeeded} succeeded · ${failed} failed.`, 'info');
+
+  btn.disabled          = false;
+  btn.classList.remove('loading');
+  spinner.style.display = 'none';
+  btnText.textContent   = '⚡ Generate';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST — unchanged
+══════════════════════════════════════════════════════════════ */
+function showToast(message, type='info'){
+  const container = document.getElementById('toastContainer');
+  const toast     = document.createElement('div');
+  const icons     = { success:'✓', error:'✕', info:'ℹ' };
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span>${icons[type]||'ℹ'}</span>${escapeHtml(message)}`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.3s,transform 0.3s';
+    toast.style.opacity    = '0';
+    toast.style.transform  = 'translateX(110%)';
+    setTimeout(() => toast.remove(), 320);
+  }, 3200);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   KEYBOARD SHORTCUT — unchanged
+══════════════════════════════════════════════════════════════ */
+document.getElementById('eventIdInput').addEventListener('keydown', e => {
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter') generateManifests();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════ */
+onHeadendChange();
+</script>
+</body>
+</html>
