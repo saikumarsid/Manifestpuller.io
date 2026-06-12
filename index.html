@@ -100,7 +100,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .ctrl-select option{background:var(--bg-card)}
 
-/* Event ID textarea in header */
 .ctrl-textarea{
   background:var(--bg-input);
   border:1px solid var(--border);
@@ -122,7 +121,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .ctrl-textarea::placeholder{color:var(--text-muted);font-size:10px}
 
-/* Profile pills */
 .profile-pills{display:flex;gap:4px}
 .profile-pill{
   padding:4px 10px;
@@ -142,7 +140,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   color:var(--accent);
 }
 
-/* Generate button */
 .generate-btn{
   display:flex;align-items:center;gap:7px;
   padding:7px 18px;
@@ -182,7 +179,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   flex-shrink:0;
 }
 
-/* ══ MAIN BODY ══ */
 .app-body{
   height:calc(100vh - 52px);
   overflow-y:auto;
@@ -193,7 +189,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .app-body::-webkit-scrollbar-track{background:transparent}
 .app-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 
-/* ══ EMPTY STATE ══ */
 .empty-state{
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
@@ -210,7 +205,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   color:var(--text-secondary);font-family:monospace;
 }
 
-/* ══ RESULTS HEADER BAR ══ */
 .results-bar{
   display:flex;align-items:center;justify-content:space-between;
   padding:10px 14px;
@@ -224,7 +218,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .results-meta-tags{display:flex;gap:6px}
 .results-bar-right{display:flex;gap:6px}
 
-/* ══ TAGS ══ */
 .tag{
   font-size:9px;font-weight:700;
   padding:2px 7px;border-radius:4px;
@@ -234,7 +227,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .tag-format{background:rgba(34,197,94,0.1);color:#86efac;border:1px solid rgba(34,197,94,0.18)}
 .tag-profile{background:rgba(248,255,0,0.08);color:#e8ef00;border:1px solid rgba(248,255,0,0.18)}
 
-/* ══ EVENT RESULT BLOCK ══ */
 .event-block{
   background:var(--bg-card);
   border:1px solid var(--border);
@@ -243,7 +235,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .event-block.has-error{border-color:rgba(239,68,68,0.25)}
 
-/* Event block header */
 .event-header{
   display:flex;align-items:center;gap:10px;
   padding:12px 16px;
@@ -282,11 +273,9 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .chevron{color:var(--text-muted);font-size:11px;transition:transform 0.2s;flex-shrink:0}
 .chevron.open{transform:rotate(180deg)}
 
-/* Event block body */
 .event-body{display:none;flex-direction:column;gap:0}
 .event-body.open{display:flex}
 
-/* ══ URL ROW ══ */
 .url-row{
   display:flex;align-items:center;gap:8px;
   padding:10px 16px;
@@ -305,10 +294,7 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .url-actions{display:flex;gap:5px;flex-shrink:0}
 
-/* ══ MANIFEST TABS ══ */
-.manifest-tabs-wrapper{
-  display:flex;flex-direction:column;
-}
+.manifest-tabs-wrapper{display:flex;flex-direction:column}
 .manifest-tab-bar{
   display:flex;align-items:center;gap:0;
   border-bottom:1px solid var(--border);
@@ -340,7 +326,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .manifest-tab.tab-error .tab-dot{background:var(--error)}
 .manifest-tab.tab-success .tab-dot{background:var(--success)}
 
-/* ══ MANIFEST PANEL ══ */
 .manifest-panel{display:none;flex-direction:column}
 .manifest-panel.active{display:flex}
 
@@ -364,7 +349,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .manifest-toolbar-right{display:flex;gap:5px}
 
-/* ══ MANIFEST VIEWER ══ */
 .manifest-viewer{
   position:relative;
   background:#080808;
@@ -384,7 +368,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .manifest-pre::-webkit-scrollbar-track{background:transparent}
 .manifest-pre::-webkit-scrollbar-thumb{background:#222;border-radius:4px}
 
-/* Syntax colours */
 .hl-tag{color:#c084fc}
 .hl-url{color:#7dd3fc}
 .hl-num{color:#fbbf24}
@@ -394,7 +377,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .hl-xml-attr{color:#86efac}
 .hl-xml-val{color:#fbbf24}
 
-/* ══ SKELETON ══ */
 .skeleton{
   background:linear-gradient(90deg,#161616 25%,#1e1e1e 50%,#161616 75%);
   background-size:200% 100%;
@@ -404,7 +386,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .skeleton-block{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
 
-/* ══ ERROR BLOCK ══ */
 .error-block{
   display:flex;align-items:flex-start;gap:10px;
   padding:14px 16px;
@@ -415,7 +396,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .error-msg{font-size:11.5px;color:#fca5a5;line-height:1.6}
 .error-msg strong{display:block;color:var(--error);margin-bottom:3px;font-size:12px}
 
-/* ══ BUTTONS ══ */
 .action-btn{
   padding:4px 10px;
   background:transparent;
@@ -445,7 +425,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 .icon-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
 
-/* ══ TOAST ══ */
 .toast-container{
   position:fixed;bottom:20px;right:20px;
   display:flex;flex-direction:column;gap:7px;z-index:9999;
@@ -462,7 +441,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 .toast.info{background:var(--accent-dim);border:1px solid var(--accent-border);color:var(--accent)}
 @keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-/* ══ DIVIDER ══ */
 .section-divider{height:1px;background:var(--border);margin:0}
 </style>
 </head>
@@ -477,7 +455,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   </div>
 
   <div class="header-controls">
-
     <div class="ctrl-group">
       <div class="ctrl-label">Event IDs</div>
       <textarea
@@ -523,7 +500,6 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
         <span id="btnText">⚡ Generate</span>
       </button>
     </div>
-
   </div>
 
   <div class="header-badge">DAZN Internal</div>
@@ -546,11 +522,7 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 <script>
 /* ══════════════════════════════════════════════════════════════
    URL TEMPLATES
-   CHANGE 1 & 3: DCG and DCH now use {PROFILE} placeholder.
-   Each profile maps to a separate base URL for DCG/DCH because
-   the token segment differs per profile on those headends.
 ══════════════════════════════════════════════════════════════ */
-
 const DCG_TOKEN = 'aHA5ZHpwc2NlOW5meXMwcmlteGFzZ3phOW15bmt0ZmRuYWEyaTI1MDlzMGttaXNmM2RvdzlodTN0YjQ5b3ZwZnA5Z2JvYmI2ZGoxZXo3djcwdDU5YjF5cjE1NzRseTNzN3NvYzNucHA1ZXJvZThvYnBvbWxqcmZjbDRvbzJ1dXA=';
 const DCH_TOKEN = 'aHA5ZHpwc2NlOW5meXMwcmlteGFzZ3phOW15bmt0ZmRuYWEyaTI1MDlzMGttaXNmM2RvdzlodTN0YjQ5b3ZwZnA5Z2JvYmI2ZGoxZXo3djcwdDU5YjF5cjE1NzRseTNzN3NvYzNucHA1ZXJvZThvYnBvbWxqcmZjbDRvbzJ1dXA=';
 
@@ -565,12 +537,10 @@ const URL_TEMPLATES = {
     DASH:  'https://m2a-dazn-preview-dcb.m2amedia.services/{EVENT_ID}/{PROFILE}/stream.mpd?outlet=global',
     Smooth:'https://m2a-dazn-preview-dcb.m2amedia.services/{EVENT_ID}/{PROFILE}/Manifest?outlet=global',
   },
-  // DCG: token is the same for all profiles, only the profile segment changes
   DCG:{
     HLS: `https://dazn-dcg-prda.uksouth-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCG_TOKEN}/{PROFILE}/stream.m3u8`,
     DASH:`https://dazn-dcg-prda.uksouth-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCG_TOKEN}/{PROFILE}/stream.mpd`,
   },
-  // DCH: token is the same for all profiles, only the profile segment changes
   DCH:{
     HLS: `https://live-live-dazn-az-dch-prda.westeurope-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCH_TOKEN}/{PROFILE}/stream.m3u8`,
     DASH:`https://live-live-dazn-az-dch-prda.westeurope-3.streaming.mediakind.com/{EVENT_ID}-clear/${DCH_TOKEN}/{PROFILE}/stream.mpd`,
@@ -584,7 +554,7 @@ let selectedProfile = 'all';
 const manifestStore = {};
 
 /* ══════════════════════════════════════════════════════════════
-   HEADEND CHANGE — unchanged
+   HEADEND CHANGE
 ══════════════════════════════════════════════════════════════ */
 function onHeadendChange(){
   const headend   = document.getElementById('headendSelect').value;
@@ -597,7 +567,7 @@ function onHeadendChange(){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PROFILE SELECTION — unchanged
+   PROFILE SELECTION
 ══════════════════════════════════════════════════════════════ */
 function selectProfile(btn){
   document.querySelectorAll('.profile-pill').forEach(b => b.classList.remove('active'));
@@ -606,18 +576,18 @@ function selectProfile(btn){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   BUILD MASTER URL — unchanged logic, {PROFILE} now works for
-   all headends because templates include the placeholder
+   BUILD MASTER URL
 ══════════════════════════════════════════════════════════════ */
 function buildUrl(eventId, headend, format){
   const template = URL_TEMPLATES[headend]?.[format];
   if(!template) return null;
   return template
-    .replace('{EVENT_ID}', eventId.trim()).replace('{PROFILE}', selectedProfile);
+    .replace('{EVENT_ID}', eventId.trim())
+    .replace('{PROFILE}',  selectedProfile);
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PARSE EVENT IDs — unchanged
+   PARSE EVENT IDs
 ══════════════════════════════════════════════════════════════ */
 function parseEventIds(raw){
   return raw
@@ -660,24 +630,21 @@ async function fetchManifest(url){
 ══════════════════════════════════════════════════════════════ */
 function resolveChildUrl(masterUrl, relativePath){
   try{
-    const base    = masterUrl.split('?')[0];
-    const baseUrl = new URL(base);
+    const base     = masterUrl.split('?')[0];
+    const baseUrl  = new URL(base);
     const basePath = baseUrl.pathname.substring(0, baseUrl.pathname.lastIndexOf('/') + 1);
-    const parts   = (basePath + relativePath).split('/');
+    const parts    = (basePath + relativePath).split('/');
     const resolved = [];
     for(const part of parts){
       if(part === '..') resolved.pop();
       else if(part !== '.') resolved.push(part);
     }
     return `${baseUrl.origin}${resolved.join('/')}`;
-  } catch(e){
-    return null;
-  }
+  } catch(e){ return null; }
 }
 
 /* ══════════════════════════════════════════════════════════════
    PARSE HLS MASTER — unchanged
-   Used for ALL headends (DCA, DCB, DCG, DCH) when format=HLS
 ══════════════════════════════════════════════════════════════ */
 function parseHlsChildren(masterContent, masterUrl){
   const lines = masterContent.split('\n');
@@ -686,25 +653,18 @@ function parseHlsChildren(masterContent, masterUrl){
 
   for(let i = 0; i < lines.length; i++){
     const line = lines[i].trim();
-
     if(!audioRelative && line.startsWith('#EXT-X-MEDIA') && line.includes('TYPE=AUDIO')){
       const m = line.match(/URI="([^"]+)"/);
       if(m) audioRelative = m[1];
     }
-
     if(!videoRelative && line.startsWith('#EXT-X-STREAM-INF')){
       for(let j = i+1; j < lines.length; j++){
         const next = lines[j].trim();
-        if(next.length > 0 && !next.startsWith('#')){
-          videoRelative = next;
-          break;
-        }
+        if(next.length > 0 && !next.startsWith('#')){ videoRelative = next; break; }
       }
     }
-
     if(videoRelative && audioRelative) break;
   }
-
   return {
     video: videoRelative ? resolveChildUrl(masterUrl, videoRelative) : null,
     audio: audioRelative ? resolveChildUrl(masterUrl, audioRelative) : null,
@@ -712,9 +672,7 @@ function parseHlsChildren(masterContent, masterUrl){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PARSE DASH / SMOOTH — kept in code but NOT called anymore
-   (CHANGE 2: DASH and Smooth show Master only)
-   These functions are retained so nothing is removed.
+   PARSE DASH / SMOOTH — kept, not called for child tabs
 ══════════════════════════════════════════════════════════════ */
 function parseDashChildren(masterContent, masterUrl){
   try{
@@ -724,7 +682,6 @@ function parseDashChildren(masterContent, masterUrl){
     const mpdBase   = mpdBaseEl ? mpdBaseEl.textContent.trim() : '';
     let videoUrl    = null;
     let audioUrl    = null;
-
     doc.querySelectorAll('AdaptationSet').forEach(adapt => {
       const contentType = (adapt.getAttribute('contentType') || '').toLowerCase();
       const mimeType    = (adapt.getAttribute('mimeType')    || '').toLowerCase();
@@ -732,7 +689,6 @@ function parseDashChildren(masterContent, masterUrl){
       const isAudio = contentType === 'audio' || mimeType.includes('audio');
       const segTemplate = adapt.querySelector('SegmentTemplate');
       const rep         = adapt.querySelector('Representation');
-
       if(segTemplate && rep){
         const init  = segTemplate.getAttribute('initialization') || segTemplate.getAttribute('media') || '';
         const repId = rep.getAttribute('id')        || '';
@@ -767,7 +723,6 @@ function parseSmoothChildren(masterContent, masterUrl){
     const doc    = parser.parseFromString(masterContent, 'application/xml');
     let videoUrl = null;
     let audioUrl = null;
-
     doc.querySelectorAll('StreamIndex').forEach(stream => {
       const type      = (stream.getAttribute('Type') || '').toLowerCase();
       const url       = stream.getAttribute('Url')   || '';
@@ -786,7 +741,7 @@ function parseSmoothChildren(masterContent, masterUrl){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   SYNTAX HIGHLIGHT — unchanged
+   ESCAPE HTML — unchanged
 ══════════════════════════════════════════════════════════════ */
 function escapeHtml(str){
   return String(str)
@@ -796,6 +751,64 @@ function escapeHtml(str){
     .replace(/"/g,'&quot;');
 }
 
+/* ══════════════════════════════════════════════════════════════
+   PRETTY PRINT XML
+   ── NEW FUNCTION ──
+   Reformats minified single-line XML (as returned by DCG/DCH)
+   into properly indented multi-line output.
+   Only called for DASH format before highlighting.
+   If the content already has line breaks it is returned as-is.
+══════════════════════════════════════════════════════════════ */
+function prettyPrintXml(xmlStr){
+  // If already multi-line (DCA/DCB style), return unchanged
+  if(xmlStr.indexOf('\n') !== -1) return xmlStr;
+
+  try{
+    const INDENT = '  ';
+    let formatted  = '';
+    let depth      = 0;
+    // Split on tag boundaries, keeping the delimiters
+    const tokens = xmlStr.split(/(<[^>]+>)/g);
+
+    for(let i = 0; i < tokens.length; i++){
+      const token = tokens[i].trim();
+      if(!token) continue;
+
+      if(token.startsWith('<?')){
+        // XML declaration — top level, no indent
+        formatted += token + '\n';
+      } else if(token.startsWith('<!--')){
+        // Comment
+        formatted += INDENT.repeat(depth) + token + '\n';
+      } else if(token.startsWith('</')){
+        // Closing tag — dedent first
+        depth = Math.max(0, depth - 1);
+        formatted += INDENT.repeat(depth) + token + '\n';
+      } else if(token.startsWith('<') && token.endsWith('/>')){
+        // Self-closing tag
+        formatted += INDENT.repeat(depth) + token + '\n';
+      } else if(token.startsWith('<')){
+        // Opening tag
+        formatted += INDENT.repeat(depth) + token + '\n';
+        depth++;
+      } else {
+        // Text content — only output if non-empty
+        const text = token.trim();
+        if(text){
+          formatted += INDENT.repeat(depth) + text + '\n';
+        }
+      }
+    }
+    return formatted.trimEnd();
+  } catch(e){
+    // If anything goes wrong, return original unchanged
+    return xmlStr;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SYNTAX HIGHLIGHT — unchanged
+══════════════════════════════════════════════════════════════ */
 function highlightHls(text){
   return text.split('\n').map(line => {
     const e = escapeHtml(line);
@@ -823,11 +836,19 @@ function highlightXml(text){
   }).join('\n');
 }
 
+/* ══════════════════════════════════════════════════════════════
+   HIGHLIGHT MANIFEST
+   ── ONLY CHANGE ──
+   For DASH and Smooth, run prettyPrintXml() first so that
+   minified single-line manifests (DCG/DCH) are reformatted
+   before syntax highlighting. DCA/DCB are unaffected because
+   prettyPrintXml() returns them unchanged (already have \n).
+══════════════════════════════════════════════════════════════ */
 function highlightManifest(text, format){
   if(!text) return '';
   if(format === 'HLS')    return highlightHls(text);
-  if(format === 'DASH')   return highlightXml(text);
-  if(format === 'Smooth') return highlightXml(text);
+  if(format === 'DASH')   return highlightXml(prettyPrintXml(text));
+  if(format === 'Smooth') return highlightXml(prettyPrintXml(text));
   return escapeHtml(text);
 }
 
@@ -1016,10 +1037,7 @@ function renderSkeleton(blockId, eventId, url, headend, format){
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UPDATE EVENT BLOCK
-   CHANGE 2: Video/Audio child tabs only shown for HLS.
-   CHANGE 4: Layout is identical for all headends — no special
-             casing for DCG/DCH, same vertical tab+panel layout.
+   UPDATE EVENT BLOCK — unchanged
 ══════════════════════════════════════════════════════════════ */
 function updateBlock(blockId, eventId, url, headend, format, masterResult, childResults){
   const block  = document.getElementById(blockId);
@@ -1045,7 +1063,6 @@ function updateBlock(blockId, eventId, url, headend, format, masterResult, child
   const tabs   = [];
   const panels = [];
 
-  // Master tab — always shown for all formats and all headends
   const masterStatus = masterResult.ok ? 'tab-success' : 'tab-error';
   tabs.push(`
     <div class="manifest-tab active ${masterStatus}" id="tab-${blockId}-master"
@@ -1054,8 +1071,7 @@ function updateBlock(blockId, eventId, url, headend, format, masterResult, child
     </div>`);
   panels.push(buildManifestPanel(blockId, 'master', eventId, format, masterResult, true));
 
-  // CHANGE 2: Video + Audio child tabs — HLS ONLY (all headends DCA/DCB/DCG/DCH)
-  // DASH and Smooth show Master tab only — no child tabs
+  // HLS only — child tabs
   if(format === 'HLS'){
     if(childResults.video !== undefined){
       const vStatus = childResults.video?.ok ? 'tab-success' : 'tab-error';
@@ -1079,7 +1095,6 @@ function updateBlock(blockId, eventId, url, headend, format, masterResult, child
     }
   }
 
-  // CHANGE 4: Same body HTML structure for all headends
   body.innerHTML = `
     <div class="url-row">
       <span class="url-label">URL</span>
@@ -1098,9 +1113,7 @@ function updateBlock(blockId, eventId, url, headend, format, masterResult, child
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MAIN — GENERATE MANIFESTS
-   CHANGE 2: Child fetching only happens for HLS.
-   DASH and Smooth skip child parsing entirely.
+   MAIN — GENERATE MANIFESTS — unchanged
 ══════════════════════════════════════════════════════════════ */
 async function generateManifests(){
   const rawInput = document.getElementById('eventIdInput').value;
@@ -1157,30 +1170,22 @@ async function generateManifests(){
 
   const results = await Promise.allSettled(jobs.map(async job => {
 
-    // 1. Fetch master manifest — unchanged
     const masterResult = await fetchManifest(job.url);
 
-    // 2. CHANGE 2: Only parse and fetch children for HLS
     let childUrls    = { video:null, audio:null };
     let childResults = {};
 
     if(masterResult.ok && format === 'HLS'){
-      // CHANGE 1: HLS children work for ALL headends including DCG and DCH
       childUrls = parseHlsChildren(masterResult.content, job.url);
-
       const [videoResult, audioResult] = await Promise.all([
         childUrls.video ? fetchManifest(childUrls.video) : Promise.resolve(null),
         childUrls.audio ? fetchManifest(childUrls.audio) : Promise.resolve(null),
       ]);
-
       if(childUrls.video !== null) childResults.video = videoResult;
       if(childUrls.audio !== null) childResults.audio = audioResult;
     }
-    // DASH and Smooth: masterResult only, childResults stays empty {}
 
-    // 3. Update UI block
     updateBlock(job.blockId, job.eventId, job.url, headend, format, masterResult, childResults);
-
     return { masterResult, childResults };
   }));
 
